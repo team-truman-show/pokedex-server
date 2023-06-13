@@ -1,10 +1,13 @@
+
 const {sequelize} = require('./connection');
 const User = require('./users');
 const Poketmon = require('./poketmons');
 const Mypoketmon = require('./mypoketmons');
+
 const db = {};
 
 db.sequelize = sequelize;
+
 
 db.User = User;
 db.Poketmon = Poketmon;

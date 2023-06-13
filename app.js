@@ -1,3 +1,4 @@
+
 const express = require('express');
 const models = require('./models/index');
 
@@ -12,3 +13,4 @@ models.sequelize.authenticate().then(() => {
 }).catch((err) => {
     console.error('DB connection fail',err);
 })
+
