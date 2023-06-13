@@ -11,6 +11,9 @@ router.post("/signup", async (req, res) => {
     if (exUser) {
       return res.status(400).send("이미 있는 아이디입니다");
     }
+    if (!req.body.userid || !req.body.password || !req.body.nickname) {
+      return res.status(400).send("모든 값을 입력해주세요");
+    }
 
     const { hashedPassword, salt } = await createCryptoPassword(
       String(req.body.password)
