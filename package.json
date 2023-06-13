@@ -1,0 +1,27 @@
+{
+  "name": "poke-server",
+  "version": "1.0.0",
+  "description": "\"truman show's first project server\"",
+  "main": "app.js",
+  "directories": {
+    "lib": "lib"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev" : "nodemon app",
+    "start" : "node app"
+  },
+  "exports": {
+    "./types/query-types": "./types/query-types"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "dotenv": "^16.1.4",
+    "express": "^4.18.2",
+    "jsonwebtoken": "^9.0.0",
+    "mysql2": "^3.3.5",
+    "sequelize": "^6.32.0",
+    "superagent": "^8.0.9"
+  }
+}
