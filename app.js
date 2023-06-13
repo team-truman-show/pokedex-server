@@ -1,3 +1,4 @@
+
 const express = require('express');
 const models = require('./models/index');
 const loginRouter = require('./service/login')
@@ -8,7 +9,6 @@ const app = express();
 // body-parser 미들웨어 설정
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
-
 
 models.sequelize.authenticate().then(() => {
     models.sequelize.sync().then(()=> {
