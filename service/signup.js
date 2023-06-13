@@ -1,6 +1,6 @@
 const express = require("express");
-const cryptoPassword = require("../lib/passworddUtil");
-
+const createCryptoPassword = require("../lib/passwordUtil");
+const User = require("../models/users");
 const router = express.Router();
 
 router.post("/signup", async (req, res) => {
@@ -9,15 +9,21 @@ router.post("/signup", async (req, res) => {
       where: { userid: req.body.userid },
     });
     if (exUser) {
-      return res.status(400).redirect("이미 있는 아이디입니다");
+      return res.status(400).send("이미 있는 아이디입니다");
     }
+
+    const { hashedPassword, salt } = await createCryptoPassword(
+      String(req.body.password)
+    );
 
     await User.create({
       userid: req.body.userid,
-      password: cryptoPassword(req.body.password),
+      password: hashedPassword,
+      salt: salt,
       nickname: req.body.nickname,
     });
-    res.status(200), json({ message: "회원가입 성공" });
+
+    res.status(200).json({ message: "회원가입 성공" });
   } catch (err) {
     console.error("err", err);
   }
