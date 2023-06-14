@@ -9,21 +9,25 @@ router.post("/login", (req, res) => {
   const password = req.body.password;
   login(userid, password)
     .then((result) => {
+        if(result instanceof Error)
+            throw result;
       res.set("token", result);
       res.status(200).send(result);
     })
     .catch((err) => {
-      res.status(401).send(err);
+      res.status(401).send(err.message);
     });
 });
 //회원가입
 router.post("/signup", (req, res) => {
   signup(req.body)
     .then((result) => {
+        if(result instanceof Error)
+            throw result;
       res.status(200).send(result);
     })
     .catch((err) => {
-      res.status(401).send(err);
+      res.status(401).send(err.message);
     });
 });
 //닉네임 변경
@@ -32,7 +36,6 @@ router.patch("/update", (req, res) => {
   const newNickname = req.body.nickname;
   update(userid, newNickname)
     .then((result) => {
-      console.log(result);
       res.status(200).send(result);
     })
     .catch((err) => {
