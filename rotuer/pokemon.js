@@ -32,6 +32,6 @@ async function save() {
       }
     }
   }
-//이름 검색
+//이름으로 검색
 
 module.exports = {router,save};
