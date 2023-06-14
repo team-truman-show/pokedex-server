@@ -26,6 +26,10 @@ module.exports = class Pokemon extends Sequelize.Model {
             },
             type2: {
                 type: Sequelize.STRING(20)
+            },
+            imageurl: {
+                type: Sequelize.STRING(100),
+                allowNull: false
             }
         }, {
             sequelize,
