@@ -10,36 +10,38 @@ async function performLogin(userid, password) {
     });
 
     if (!user) {
-      return false;
+      return new Error("회원가입 하세요");
     }
-    // console.log(user.salt, user.password, password);
     const isPasswordValid = await verifyPassword(
       password,
       user.salt,
       user.password
     );
     if (!isPasswordValid) {
-      return false;
+      return new Error("비밀번호가 틀립니다");
     }
 
     return true;
   } catch (err) {
-    throw err;
+    return new Error('로그인 실패');
   }
 }
 
-async function login(userid,password) {
+async function Login(userid,password) {
     try {
       const isLoginSuccessful = await performLogin(userid, password);
 
+      if(isLoginSuccessful instanceof Error)
+        throw isLoginSuccessful;
       if (isLoginSuccessful) {
         const token = tokenUtil.makeToken(userid);
         return token;
       }
-      return new Error('로그인 실패');
-    } catch (err) {
-      return err;
+      throw new Error('로그인 실패');
+    } catch (err) { 
+      console.log(err);
+      throw err;
     }
 }
 
-module.exports = login;
+module.exports = Login;

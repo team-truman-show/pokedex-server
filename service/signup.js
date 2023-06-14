@@ -2,17 +2,17 @@
 const {createCryptoPassword} = require("../lib/passwordUtil");
 const User = require("../models/users");
 
-async function signup(param){
+async function Signup(param){
   try{
   const {userid, password, nickname} = param;
     const exUser = await User.findOne({
       where: { userid: userid },
     });
     if (exUser) {
-      throw new Error("이미 있는 아이디입니다.");
+      return new Error("이미 있는 아이디입니다.");
     }
     if (!userid || !password || !nickname) {
-      throw new Error("모든 값을 입력해주세요");
+      return new Error("모든 값을 입력해주세요");
     }
 
     const { hashedPassword, salt } = await createCryptoPassword(
@@ -32,4 +32,4 @@ async function signup(param){
   }
 };
 
-module.exports = signup;
+module.exports = Signup;

@@ -28,15 +28,13 @@ async function Pokeapi(id){
             type2 = response2.body.types[1].type.name;
         imgurl = response2.body.sprites.other['official-artwork'].front_default;
         const result = {
-            "id":id,
-            "name": name,
-            "feature": feature,
-            "descriptoin": description,
-            "type1": type1,
-            "type2": type2,
-            "imgurl": imgurl
+            name: name,
+            feature : feature,
+            description : description,
+            type1 : type1,
+            type2 : type2,
+            imageurl : imgurl
         }
-        console.log(result);
         return result;
     } catch(err) {
         return err;
