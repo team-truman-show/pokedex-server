@@ -16,7 +16,7 @@ module.exports = class Pokemon extends Sequelize.Model {
                 type: Sequelize.STRING(50),
                 allowNull: false,
             },
-            desciption: {
+            description: {
                 type: Sequelize.STRING(300),
                 allowNull: false
             },
@@ -28,7 +28,7 @@ module.exports = class Pokemon extends Sequelize.Model {
                 type: Sequelize.STRING(20)
             },
             imageurl: {
-                type: Sequelize.STRING(100),
+                type: Sequelize.STRING(300),
                 allowNull: false
             }
         }, {
