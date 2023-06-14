@@ -1,5 +1,5 @@
 const User = require("../models/users");
-const { createSalt, createCryptoPassword } = require("../lib/passwordUtil");
+const { createCryptoPassword } = require("../lib/passwordUtil");
 
 async function change(nickname, id, newPassword) {
   try {
@@ -14,8 +14,8 @@ async function change(nickname, id, newPassword) {
         throw new Error("일치하지 않는 아이디입니다");
       }
     }
-    const salt = await createSalt();
-    const { hashedPassword } = await createCryptoPassword(newPassword, salt);
+    // const salt = await createSalt();
+    const { hashedPassword, salt } = await createCryptoPassword(newPassword);
 
     exUser.password = hashedPassword;
     exUser.salt = salt;
