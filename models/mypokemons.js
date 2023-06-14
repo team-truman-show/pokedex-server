@@ -1,6 +1,6 @@
 const Sequelize = require('sequelize');
 
-module.exports = class Mypoketmon extends Sequelize.Model{
+module.exports = class Mypokemon extends Sequelize.Model{
     static init(sequelize){
         return super.init({
             id: {
@@ -14,11 +14,11 @@ module.exports = class Mypoketmon extends Sequelize.Model{
         })
     }
     static associate(db) {
-        db.Mypoketmon.belongsTo(db.User,{foreignKey: {name:'userid',onDelete:'SET NULL',as:'User'}})
+        db.Mypokemon.belongsTo(db.User,{foreignKey: {name:'userid',onDelete:'SET NULL',as:'User'}})
     };
     static associate(db) {
-        db.Mypoketmon.belongsTo(db.Poketmon,{foreignKey:{
-            name:'pokeid',onDelete:'SET NULL',as: 'Poketmon'
+        db.Mypokemon.belongsTo(db.Pokemon,{foreignKey:{
+            name:'pokeid',onDelete:'SET NULL',as: 'Pokemon'
         }})
     }
 }

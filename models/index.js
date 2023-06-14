@@ -1,8 +1,8 @@
 
 const {sequelize} = require('./connection');
 const User = require('./users');
-const Poketmon = require('./poketmons');
-const Mypoketmon = require('./mypoketmons');
+const Pokemon = require('./pokemons');
+const Mypokemon = require('./mypokemons');
 
 const db = {};
 
@@ -10,15 +10,15 @@ db.sequelize = sequelize;
 
 
 db.User = User;
-db.Poketmon = Poketmon;
-db.Mypoketmon = Mypoketmon;
+db.Pokemon = Pokemon;
+db.Mypokemon = Mypokemon;
 
 User.init(sequelize);
-Poketmon.init(sequelize);
-Mypoketmon.init(sequelize);
+Pokemon.init(sequelize);
+Mypokemon.init(sequelize);
 
 User.associate(db);
-Poketmon.associate(db);
-Mypoketmon.associate(db);
+Pokemon.associate(db);
+Mypokemon.associate(db);
 
 module.exports = db;
