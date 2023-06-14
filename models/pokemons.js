@@ -1,6 +1,6 @@
 const Sequelize = require('sequelize');
 
-module.exports = class Poketmon extends Sequelize.Model {
+module.exports = class Pokemon extends Sequelize.Model {
     static init(sequelize){
         return super.init({
             id: {
@@ -34,6 +34,6 @@ module.exports = class Poketmon extends Sequelize.Model {
         })
     }
     static associate(db) {
-        db.Poketmon.hasMany(db.Mypoketmon,{foreignKey: {name: 'pokeid',onDelete:'SET NULL',as:'Mypoketmons'}})
+        db.Pokemon.hasMany(db.Mypokemon,{foreignKey: {name: 'pokeid',onDelete:'SET NULL',as:'Mypokemons'}})
     }
 }
