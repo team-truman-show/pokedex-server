@@ -1,15 +1,14 @@
 const express = require("express");
 const models = require("./models/index");
-const loginRouter = require("./service/login");
-const signupRouter = require("./service/signup");
+const userRouter = require("./rotuer/user");
 const bodyParser = require("body-parser");
-
+const pokemonRouter = require('./rotuer/pokemon');
 const app = express();
 // body-parser 미들웨어 설정
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
-app.use("/", loginRouter);
-app.use("/", signupRouter);
+app.use("/user", userRouter);
+app.use("/pokemon",pokemonRouter);
 
 models.sequelize
   .authenticate()
