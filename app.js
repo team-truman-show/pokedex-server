@@ -2,6 +2,7 @@ const express = require("express");
 const models = require("./models/index");
 const loginRouter = require("./service/login");
 const signupRouter = require("./service/signup");
+const updateRouter = require("./service/update");
 const bodyParser = require("body-parser");
 
 const app = express();
@@ -10,6 +11,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use("/", loginRouter);
 app.use("/", signupRouter);
+app.use("/", updateRouter);
 
 models.sequelize
   .authenticate()
