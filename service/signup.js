@@ -1,10 +1,9 @@
-
-const {createCryptoPassword} = require("../lib/passwordUtil");
+const { createCryptoPassword } = require("../lib/passwordUtil");
 const User = require("../models/users");
 
-async function Signup(param){
-  try{
-  const {userid, password, nickname} = param;
+async function Signup(param) {
+  try {
+    const { userid, password, nickname } = param;
     const exUser = await User.findOne({
       where: { userid: userid },
     });
@@ -30,6 +29,6 @@ async function Signup(param){
   } catch (err) {
     return err;
   }
-};
+}
 
 module.exports = Signup;

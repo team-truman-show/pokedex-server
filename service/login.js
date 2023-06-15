@@ -1,7 +1,6 @@
-
 const User = require("../models/users");
 const tokenUtil = require("../lib/tokenUtil");
-const {verifyPassword} = require("../lib/passwordUtil");
+const { verifyPassword } = require("../lib/passwordUtil");
 
 async function performLogin(userid, password) {
   try {
@@ -23,25 +22,24 @@ async function performLogin(userid, password) {
 
     return true;
   } catch (err) {
-    return new Error('로그인 실패');
+    return new Error("로그인 실패");
   }
 }
 
-async function Login(userid,password) {
-    try {
-      const isLoginSuccessful = await performLogin(userid, password);
+async function Login(userid, password) {
+  try {
+    const isLoginSuccessful = await performLogin(userid, password);
 
-      if(isLoginSuccessful instanceof Error)
-        throw isLoginSuccessful;
-      if (isLoginSuccessful) {
-        const token = tokenUtil.makeToken(userid);
-        return token;
-      }
-      throw new Error('로그인 실패');
-    } catch (err) { 
-      console.log(err);
-      throw err;
+    if (isLoginSuccessful instanceof Error) throw isLoginSuccessful;
+    if (isLoginSuccessful) {
+      const token = tokenUtil.makeToken(userid);
+      return token;
     }
+    throw new Error("로그인 실패");
+  } catch (err) {
+    console.log(err);
+    throw err;
+  }
 }
 
 module.exports = Login;

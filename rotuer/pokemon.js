@@ -1,5 +1,6 @@
-const express = require('express');
+const express = require("express");
 const router = express.Router();
+const search = require("../service/pokesearch");
 const {Pokeidsearch, Pokemonidsearch} = require('../service/pokeapi');
 const Pokemon = require('../models/pokemons');
 //api 불러오기,api id 검색
@@ -42,6 +43,16 @@ router.post("/dbidsearch",(req,res) => {
 }).catch(err => {
     res.status(401).send(err.message);
    })
+});
+//db에 이름으로 포켓몬 검색
+router.post("/namesearch", async (req, res) => {
+  try {
+    const name = req.body.name;
+    const result = await search(name);
+    res.status(200).json(result);
+  } catch (err) {
+    res.status(401).send(err);
+  }
 });
   
 //이름으로 api 검색

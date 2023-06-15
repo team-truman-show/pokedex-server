@@ -3,14 +3,14 @@ const router = express.Router();
 const login = require("../service/login");
 const signup = require("../service/signup");
 const update = require("../service/update");
+const change = require("../service/pwchange");
 //로그인
 router.post("/login", (req, res) => {
   const userid = req.body.userid;
   const password = req.body.password;
   login(userid, password)
     .then((result) => {
-        if(result instanceof Error)
-            throw result;
+      if (result instanceof Error) throw result;
       res.set("token", result);
       res.status(200).send(result);
     })
@@ -22,8 +22,7 @@ router.post("/login", (req, res) => {
 router.post("/signup", (req, res) => {
   signup(req.body)
     .then((result) => {
-        if(result instanceof Error)
-            throw result;
+      if (result instanceof Error) throw result;
       res.status(200).send(result);
     })
     .catch((err) => {
@@ -34,6 +33,7 @@ router.post("/signup", (req, res) => {
 router.patch("/update", (req, res) => {
   const userid = req.body.userid;
   const newNickname = req.body.nickname;
+
   update(userid, newNickname)
     .then((result) => {
       res.status(200).send(result);
@@ -42,4 +42,17 @@ router.patch("/update", (req, res) => {
       res.status(401).send(err);
     });
 });
+//비밀번호 찾기(변경)
+router.patch("/pwchange", async (req, res) => {
+  const { nickname, userid, newPassword } = req.body;
+
+  try {
+    const result = await change(nickname, userid, newPassword);
+    res.status(200).json(result);
+  } catch (err) {
+    console.error(err);
+    res.status(401).send(err);
+  }
+});
+
 module.exports = router;
