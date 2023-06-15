@@ -7,10 +7,6 @@ module.exports = class Mypokemon extends Sequelize.Model{
                 type:Sequelize.INTEGER,
                 primaryKey: true
             },
-            imageurl : {
-                type:Sequelize.STRING(100),
-                allowNull: true
-        },
     },{
             sequelize,
             underscored: true,
