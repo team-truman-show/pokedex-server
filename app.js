@@ -10,7 +10,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use("/user", userRouter);
 app.use("/pokemon", pokemonRouter.router);
-// pokemonRougter.save();
+// pokemonRouter.save();
 models.sequelize
   .authenticate()
   .then(() => {

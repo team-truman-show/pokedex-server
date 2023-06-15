@@ -3,7 +3,6 @@ const { createCryptoPassword } = require("../lib/passwordUtil");
 
 async function change(nickname, userid, newPassword) {
   try {
-    console.log(`nickname: ${nickname}`);
     const exUser = await User.findOne({ where: { userid, nickname } });
 
     if (!exUser) {
