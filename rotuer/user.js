@@ -35,6 +35,7 @@ router.post("/signup", (req, res) => {
 router.patch("/update", (req, res) => {
   const userid = req.body.userid;
   const newNickname = req.body.nickname;
+
   update(userid, newNickname)
     .then((result) => {
       res.status(200).send(result);
@@ -52,7 +53,7 @@ router.patch("/find", async (req, res) => {
     res.status(200).json(result);
   } catch (err) {
     console.error(err);
-    res.status(401).send(err.message);
+    res.status(401).send(err);
   }
 });
 
