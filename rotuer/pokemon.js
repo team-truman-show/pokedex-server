@@ -3,6 +3,7 @@ const router = express.Router();
 const pokeapi = require("../service/pokeapi");
 const Pokemon = require("../models/pokemons");
 const search = require("../service/pokesearch");
+const searchAll = require("../service/searchAll");
 //api 불러오기,id 검색
 router.post("/idsearch", (req, res) => {
   pokeapi
@@ -34,6 +35,7 @@ async function save() {
     }
   }
 }
+
 //이름으로 api 검색
 // router.post("/namesearch", (req, res) => {
 //   pokeapi
@@ -50,9 +52,10 @@ router.post("/namesearch", async (req, res) => {
   try {
     const name = req.body.name;
     const result = await search(name);
+
     res.status(200).json(result);
   } catch (err) {
-    res.status(401).send(err);
+    res.status(401).send(err.message);
   }
 });
 
