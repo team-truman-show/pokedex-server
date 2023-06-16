@@ -13,7 +13,7 @@ router.post("/login", (req, res) => {
     .then((result) => {
       if (result instanceof Error) throw result;
       res.set("token", result);
-      res.status(200).send(result);
+      res.status(200).json({ token: result });
     })
     .catch((err) => {
       res.status(401).send(err.message);
