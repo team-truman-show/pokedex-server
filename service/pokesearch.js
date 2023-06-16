@@ -3,6 +3,7 @@ const Pokemon = require("../models/pokemons");
 async function search(name) {
   try {
     const pokemon = await Pokemon.findOne({ where: { name } });
+
     if (!pokemon) {
       throw new Error("없는 포켓몬 입니다");
     }

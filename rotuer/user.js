@@ -13,10 +13,8 @@ router.post("/login", (req, res) => {
   login(email, password)
     .then((result) => {
       if (result instanceof Error) throw result;
-    //   res.headers.authorization = `Bearer ${result}`
-    req.headers.authorization = `Bearer ${result}`;
-      res.cookie('token', result, { maxAge: 3600000 });
-      res.status(200).json({'token': result});
+      res.set("token", result);
+      res.status(200).json({ token: result });
     })
     .catch((err) => {
       res.status(401).send(err.message);
