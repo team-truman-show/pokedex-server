@@ -1,12 +1,11 @@
 const User = require("../models/users");
 const { createCryptoPassword } = require("../lib/passwordUtil");
 
-async function change(nickname, userid, newPassword) {
+async function change(nick, email, newPassword) {
   try {
-    const exUser = await User.findOne({ where: { userid, nickname } });
-
+    const exUser = await User.findOne({ where: { email, nick } });
     if (!exUser) {
-      throw new Error("일치하지 않는 id 닉네임입니다");
+      throw new Error("일치하지 않는 email과 닉네임입니다");
     }
 
     const { hashedPassword, salt } = await createCryptoPassword(newPassword);

@@ -2,12 +2,11 @@ const User = require("../models/users");
 const tokenUtil = require("../lib/tokenUtil");
 const { verifyPassword } = require("../lib/passwordUtil");
 
-async function performLogin(userid, password) {
+async function performLogin(email, password) {
   try {
     const user = await User.findOne({
-      where: { userid: userid },
+      where: { email: email },
     });
-
     if (!user) {
       return new Error("회원가입 하세요");
     }
@@ -22,22 +21,21 @@ async function performLogin(userid, password) {
 
     return true;
   } catch (err) {
-    return new Error("로그인 실패");
+    return err;
   }
 }
 
-async function Login(userid, password) {
+async function Login(email, password) {
   try {
-    const isLoginSuccessful = await performLogin(userid, password);
+    const isLoginSuccessful = await performLogin(email, password);
 
     if (isLoginSuccessful instanceof Error) throw isLoginSuccessful;
     if (isLoginSuccessful) {
-      const token = tokenUtil.makeToken(userid);
+      const token = tokenUtil.makeToken(email);
       return token;
     }
     throw new Error("로그인 실패");
   } catch (err) {
-    console.log(err);
     throw err;
   }
 }

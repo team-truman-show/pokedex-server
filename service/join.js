@@ -3,14 +3,14 @@ const User = require("../models/users");
 
 async function Signup(param) {
   try {
-    const { userid, password, nickname } = param;
+    const { email, password, nick } = param;
     const exUser = await User.findOne({
-      where: { userid: userid },
+      where: { email: email },
     });
     if (exUser) {
       return new Error("이미 있는 아이디입니다.");
     }
-    if (!userid || !password || !nickname) {
+    if (!email || !password || !nick) {
       return new Error("모든 값을 입력해주세요");
     }
 
@@ -19,13 +19,13 @@ async function Signup(param) {
     );
 
     await User.create({
-      userid: userid,
+      email: email,
       password: hashedPassword,
       salt: salt,
-      nickname: nickname,
+      nick: nick,
     });
 
-    return "성공";
+    return "회원가입 성공";
   } catch (err) {
     return err;
   }
