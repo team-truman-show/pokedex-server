@@ -4,6 +4,7 @@ const login = require("../service/login");
 const signup = require("../service/signup");
 const update = require("../service/update");
 const change = require("../service/pwchange");
+const { isLoggedIn } = require("../lib/loginUtil");
 //로그인
 router.post("/login", (req, res) => {
   const userid = req.body.userid;
@@ -30,7 +31,7 @@ router.post("/signup", (req, res) => {
     });
 });
 //닉네임 변경
-router.patch("/update", (req, res) => {
+router.patch("/update", isLoggedIn, (req, res) => {
   const userid = req.body.userid;
   const newNickname = req.body.nickname;
 
