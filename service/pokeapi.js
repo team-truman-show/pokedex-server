@@ -57,7 +57,8 @@ async function Pokemonidsearch(id){
             description : pokemon.dataValues.description,
             type1: pokemon.dataValues.type1,
             type2: pokemon.dataValues.type2,
-            imageurl: pokemon.dataValues.imageurl
+            imageurl: pokemon.dataValues.imageurl,
+            imagegif: pokemon.dataValues.imagegif
         }
         return result;
     } catch(err){

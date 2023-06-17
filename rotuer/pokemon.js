@@ -6,10 +6,10 @@ const Catchpoke = require('../service/catch');
 const searchAll = require("../service/searchAll");
 const { Pokeidsearch, Pokemonidsearch } = require("../service/pokeapi");
 const Pokemon = require("../models/pokemons");
-
+//
 //api 불러오기,api id 검색
-router.post("/idsearch", (req, res) => {
-  Pokeidsearch(req.body.id)
+router.get("/idsearch", (req, res) => {
+  Pokeidsearch(req.query.id)
     .then((result) => {
       res.status(200).send(result);
     })
@@ -50,8 +50,8 @@ router.get("/page", async (req, res) => {
 });
 
 //db에 id로 포켓몬 검색
-router.post("/dbidsearch", (req, res) => {
-  Pokemonidsearch(req.body.id)
+router.get("/dbidsearch", (req, res) => {
+  Pokemonidsearch(req.query.id)
     .then((result) => {
       if (result instanceof Error) throw result;
       res.status(200).send(result);
@@ -61,9 +61,9 @@ router.post("/dbidsearch", (req, res) => {
     });
 });
 //db에 이름으로 포켓몬 검색
-router.post("/namesearch",isLoggedIn, async (req, res) => {
+router.get("/namesearch",isLoggedIn, async (req, res) => {
   try {
-    const name = req.body.name;
+    const name = req.query.name;
     const result = await search(name);
 
     res.status(200).json(result);
