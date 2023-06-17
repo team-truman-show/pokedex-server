@@ -59,11 +59,14 @@ router.patch("/pwchange",isLoggedIn, async (req, res) => {
 //로그인 검증해서 이메일이랑 닉네임 보여주기
 router.get('/myinformation',isLoggedIn,async (req,res) => {
     try{
-        const myemail = tokenUtil.verifyToken(req.headers.token).email;
+        const tokenbearer = req.headers.authorization;
+        const token = tokenbearer.substring(7);
+        const myemail = tokenUtil.verifyToken(token).email;
         const myinfo = await informSearch(myemail);
         const mynick = myinfo.nick;
         const myid = myinfo.id;
         const result = {id: myid ,email: myemail, nick: mynick};
+        console.log(result);
         res.status(200).json(result);
     } catch(err) {
         res.status(401).send(err.message);
@@ -72,7 +75,9 @@ router.get('/myinformation',isLoggedIn,async (req,res) => {
 //내가 잡은 포켓몬들 보여주기
 router.get('/mypokemon',isLoggedIn,async (req,res) => {
     try{
-        const myemail = tokenUtil.verifyToken(req.headers.token).email;
+        const tokenbearer = req.headers.authorization;
+        const token = tokenbearer.substring(7);
+        const myemail = tokenUtil.verifyToken(token).email;
         const myinfo = await informSearch(myemail);
         const myid = myinfo.id;
         const pokemons = await Mypokemoninfo(myid);

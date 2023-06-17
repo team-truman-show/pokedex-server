@@ -84,8 +84,9 @@ router.get("/namesearch",isLoggedIn, async (req, res) => {
 //포켓몬 잡으면 mypokemondb에 저장
 router.post("/catchpoke",isLoggedIn,async (req,res)=>{
     try{
-        const useremail = tokenUtil.verifyToken(req.headers.token).email;
-        // const useremail = '5@5.com'
+        const tokenbearer = req.headers.authorization;
+        const token = tokenbearer.substring(7);
+        const useremail = tokenUtil.verifyToken(token).email;
         const userid =await Idfind(useremail);
     const pokeid = req.body.pokeid;
     const result = await Catchpoke(userid,pokeid);
