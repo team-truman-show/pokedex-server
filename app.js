@@ -4,13 +4,22 @@ const models = require("./models/index");
 const userRouter = require("./rotuer/user");
 const bodyParser = require("body-parser");
 const pokemonRouter = require("./rotuer/pokemon");
+const cors = require("cors");
 const app = express();
+
 // body-parser 미들웨어 설정
 app.use(bodyParser.json());
+app.use(
+  cors({
+    origin: ["http://localhost:5173"],
+
+    credentials: true,
+  })
+);
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use("/user", userRouter);
 app.use("/pokemon", pokemonRouter.router);
-// pokemonRouter.save();
+
 models.sequelize
   .authenticate()
   .then(() => {
