@@ -6,6 +6,8 @@ const update = require("../service/update");
 const change = require("../service/pwchange");
 const {isLoggedIn} = require('../lib/loginUtil');
 const tokenUtil = require('../lib/tokenUtil');
+const informSearch = require('../service/myinformation');
+const Mypokemoninfo = require('../service/mypokemon');
 //로그인
 router.post("/login", (req, res) => {
   const email = req.body.email;
@@ -53,17 +55,31 @@ router.patch("/pwchange",isLoggedIn, async (req, res) => {
     res.status(401).send(err);
   }
 });
-//마이페이지 조회
 
 //로그인 검증해서 이메일이랑 닉네임 보여주기
-router.get('/verify',isLoggedIn,(req,res) => {
+router.get('/myinformation',isLoggedIn,async (req,res) => {
     try{
-
+        const myemail = tokenUtil.verifyToken(req.headers.token).email;
+        const myinfo = await informSearch(myemail);
+        const mynick = myinfo.nick;
+        const myid = myinfo.id;
+        const result = {id: myid ,email: myemail, nick: mynick};
+        res.status(200).json(result);
     } catch(err) {
-
+        res.status(401).send(err.message);
     }
 })
-//잡기 버튼이 눌린다면 내 포켓몬을 저장
-router.post('/catchpoke',(req,res) =>{
+//내가 잡은 포켓몬들 보여주기
+router.get('/mypokemon',isLoggedIn,async (req,res) => {
+    try{
+        const myemail = tokenUtil.verifyToken(req.headers.token).email;
+        const myinfo = await informSearch(myemail);
+        const myid = myinfo.id;
+        const pokemons = await Mypokemoninfo(myid);
+        const pokeIds = pokemons.map(item => item.pokeid);
+        res.status(200).json(pokeIds);
+    }catch(err){
+        res.status(401).send(err.message);
+    }
 })
 module.exports = router;

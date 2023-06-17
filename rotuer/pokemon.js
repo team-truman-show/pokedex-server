@@ -6,9 +6,10 @@ const Catchpoke = require('../service/catch');
 const searchAll = require("../service/searchAll");
 const { Pokeidsearch, Pokemonidsearch } = require("../service/pokeapi");
 const Pokemon = require("../models/pokemons");
-//
+const tokenUtil = require('../lib/tokenUtil');
+const Idfind = require('../service/idsearch');
 //api 불러오기,api id 검색
-router.get("/idsearch", (req, res) => {
+router.get("/idsearch",isLoggedIn, (req, res) => {
   Pokeidsearch(req.query.id)
     .then((result) => {
       res.status(200).send(result);
@@ -39,7 +40,7 @@ async function save() {
   }
 }
 //포켓몬 전체조회
-router.get("/page", async (req, res) => {
+router.get("/page",isLoggedIn, async (req, res) => {
   try {
     searchAll(req.body).then((result) => {
       res.status(200).json(result);
@@ -50,7 +51,7 @@ router.get("/page", async (req, res) => {
 });
 
 //db에 id로 포켓몬 검색
-router.get("/dbidsearch", (req, res) => {
+router.get("/dbidsearch",isLoggedIn, (req, res) => {
   Pokemonidsearch(req.query.id)
     .then((result) => {
       if (result instanceof Error) throw result;
@@ -81,12 +82,13 @@ router.get("/namesearch",isLoggedIn, async (req, res) => {
 //     })
 // })
 //포켓몬 잡으면 mypokemondb에 저장
-router.get("/catchpoke",async (req,res)=>{
+router.post("/catchpoke",isLoggedIn,async (req,res)=>{
     try{
-    const userid = req.body.userid;
+        const useremail = tokenUtil.verifyToken(req.headers.token).email;
+        // const useremail = '5@5.com'
+        const userid =await Idfind(useremail);
     const pokeid = req.body.pokeid;
     const result = await Catchpoke(userid,pokeid);
-    console.log(result);
     if(result instanceof Error)
         throw result;
         res.status(200).json(result);
