@@ -84,16 +84,15 @@ router.get("/namesearch",isLoggedIn, async (req, res) => {
 router.post("/catchpoke",isLoggedIn,async (req,res)=>{
     try{
         const num = 3;
-        const user_num = Math.floor(Math.random() * 4);
-        console.log(req.body.pokeid,num,user_num);
-        if(num !== user_num)
-            throw new Error("25% 확률 잡기 실패!")
         const tokenbearer = req.headers.authorization;
         const token = tokenbearer.substring(7);
         const useremail = tokenUtil.verifyToken(token).email;
         const userid =await Idfind(useremail);
     const pokeid = req.body.pokeid;
     const result = await catchPoke(userid,pokeid);
+    const user_num = Math.floor(Math.random() * 4);
+        if(num !== user_num)
+            throw new Error("25% 확률 잡기 실패!")
     if(result instanceof Error)
         throw result;
         res.status(200).json(result);
