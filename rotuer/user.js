@@ -2,12 +2,11 @@ const express = require("express");
 const router = express.Router();
 const login = require("../service/login");
 const signup = require("../service/join");
-const update = require("../service/update");
-const change = require("../service/pwchange");
+const {nickChange,pwChange} = require("../service/infoUpdate");
 const {isLoggedIn} = require('../lib/loginUtil');
 const tokenUtil = require('../lib/tokenUtil');
-const informSearch = require('../service/myinformation');
-const Mypokemoninfo = require('../service/mypokemon');
+const informSearch = require('../service/myInformation');
+const Mypokemoninfo = require('../service/myPokemon');
 //로그인
 router.post("/login", (req, res) => {
   const email = req.body.email;
@@ -37,7 +36,7 @@ router.post("/signup", (req, res) => {
 router.patch("/nickchange", isLoggedIn, (req, res) => {
   const email = req.body.email;
   const newnick = req.body.nick;
-  update(email, newnick)
+  nickChange(email, newnick)
     .then((result) => {
       res.status(200).json(result);
     })
@@ -49,7 +48,7 @@ router.patch("/nickchange", isLoggedIn, (req, res) => {
 router.patch("/pwchange",isLoggedIn, async (req, res) => {
   const { nick, email, newPassword } = req.body;
   try {
-    const result = await change(nick, email, newPassword);
+    const result = await pwChange(nick, email, newPassword);
     res.status(200).json(result);
   } catch (err) {
     res.status(401).send(err);
@@ -66,7 +65,6 @@ router.get('/myinformation',isLoggedIn,async (req,res) => {
         const mynick = myinfo.nick;
         const myid = myinfo.id;
         const result = {id: myid ,email: myemail, nick: mynick};
-        console.log(result);
         res.status(200).json(result);
     } catch(err) {
         res.status(401).send(err.message);

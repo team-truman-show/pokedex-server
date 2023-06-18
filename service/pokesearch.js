@@ -12,6 +12,16 @@ async function search(name) {
   } catch (err) {
     return err.message;
   }
+};
+async function searchAll() {
+  try {
+    const pokemons = await Pokemon.findAll({
+
+    });
+    return pokemons;
+  } catch (err) {
+    return err.message;
+  }
 }
 
-module.exports = search;
+module.exports = {search,searchAll};
