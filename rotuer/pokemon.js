@@ -1,13 +1,12 @@
 const express = require("express");
 const router = express.Router();
-const search = require("../service/pokesearch");
+const {search,searchAll} = require("../service/pokeSearch");
 const { isLoggedIn } = require("../lib/loginUtil");
-const Catchpoke = require('../service/catch');
-const searchAll = require("../service/searchAll");
-const { Pokeidsearch, Pokemonidsearch } = require("../service/pokeapi");
+const {catchPoke} = require('../service/pokeCatch');
+const { Pokeidsearch, Pokemonidsearch } = require("../service/pokeApi");
 const Pokemon = require("../models/pokemons");
 const tokenUtil = require('../lib/tokenUtil');
-const Idfind = require('../service/idsearch');
+const Idfind = require('../service/idSearch');
 //api 불러오기,api id 검색
 router.get("/idsearch",isLoggedIn, (req, res) => {
   Pokeidsearch(req.query.id)
@@ -20,7 +19,7 @@ router.get("/idsearch",isLoggedIn, (req, res) => {
 });
 //db에 저장
 async function save() {
-  for (let i = 1; i <= 151; i++) {
+  for (let i = 1; i <= 386; i++) {
     try {
       const result = await Pokeidsearch(i);
       // console.log(result.name);
@@ -84,12 +83,17 @@ router.get("/namesearch",isLoggedIn, async (req, res) => {
 //포켓몬 잡으면 mypokemondb에 저장
 router.post("/catchpoke",isLoggedIn,async (req,res)=>{
     try{
+        const num = 3;
+        const user_num = Math.floor(Math.random() * 4);
+        console.log(req.body.pokeid,num,user_num);
+        if(num !== user_num)
+            throw new Error("25% 확률 잡기 실패!")
         const tokenbearer = req.headers.authorization;
         const token = tokenbearer.substring(7);
         const useremail = tokenUtil.verifyToken(token).email;
         const userid =await Idfind(useremail);
     const pokeid = req.body.pokeid;
-    const result = await Catchpoke(userid,pokeid);
+    const result = await catchPoke(userid,pokeid);
     if(result instanceof Error)
         throw result;
         res.status(200).json(result);

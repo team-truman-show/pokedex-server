@@ -7,15 +7,8 @@ const cors = require("cors");
 const app = express();
 
 // body-parser 미들웨어 설정
-app.use(cookieParser());
 app.use(bodyParser.json());
-app.use(
-  cors({
-    origin: ["http://localhost:5173"],
 
-    credentials: true,
-  })
-);
 app.use(bodyParser.urlencoded({ extended: false }));
 const corsOptions = {
     origin: ["http://localhost:5173","http://127.0.0.1:5173"],
@@ -24,7 +17,7 @@ const corsOptions = {
 app.use(cors(corsOptions));
 app.use("/user", userRouter);
 app.use("/pokemon", pokemonRouter.router);
-
+// pokemonRouter.save();
 models.sequelize
   .authenticate()
   .then(() => {

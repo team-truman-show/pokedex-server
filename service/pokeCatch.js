@@ -1,6 +1,6 @@
 const { User, Pokemon, Mypokemon } = require('../models/index');
 
-async function Catchpoke(userid, pokeid) {
+async function catchPoke(userid, pokeid) {
   try {
     const user = await User.findOne({
       where: { id: userid },
@@ -31,6 +31,7 @@ async function Catchpoke(userid, pokeid) {
   } catch (err) {
     return err;
   }
-}
+};
 
-module.exports = Catchpoke;
+
+module.exports = {catchPoke};
