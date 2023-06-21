@@ -16,7 +16,6 @@ async function search(name) {
 async function searchAll() {
   try {
     const pokemons = await Pokemon.findAll({
-
     });
     return pokemons;
   } catch (err) {

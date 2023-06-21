@@ -34,10 +34,8 @@ async function nickChange(email, newnick) {
     if (!newnick) {
       throw new Error("닉네임을 적어주세요");
     }
-
     exUser.nick = newnick; // 닉네임을 새로운 닉네임으로 변경
     await exUser.save(); // 변경사항 저장
-
     return { message: "닉네임변경 성공" };
   } catch (err) {
     return err.message;

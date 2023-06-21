@@ -18,7 +18,7 @@ router.post("/login", (req, res) => {
       res.status(200).json({ token: result });
     })
     .catch((err) => {
-      res.status(401).send(err.message);
+      res.status(401).json({ error : err.message });
     });
 });
 //회원가입
@@ -29,7 +29,7 @@ router.post("/signup", (req, res) => {
       res.status(200).json(token);
     })
     .catch((err) => {
-      res.status(401).send(err.message);
+      res.status(401).json({ error : err.message });
     });
 });
 //닉네임 변경
@@ -41,17 +41,17 @@ router.patch("/nickchange", isLoggedIn, (req, res) => {
       res.status(200).json(result);
     })
     .catch((err) => {
-      res.status(401).send(err);
+      res.status(401).json({ error : err.message });
     });
 });
 //비밀번호 찾기(변경)
-router.patch("/pwchange",isLoggedIn, async (req, res) => {
+router.patch("/myPwchange", async (req, res) => {
   const { nick, email, newPassword } = req.body;
   try {
     const result = await pwChange(nick, email, newPassword);
     res.status(200).json(result);
   } catch (err) {
-    res.status(401).send(err);
+    res.status(401).json({ error : err.message });
   }
 });
 
@@ -67,7 +67,7 @@ router.get('/myinformation',isLoggedIn,async (req,res) => {
         const result = {id: myid ,email: myemail, nick: mynick};
         res.status(200).json(result);
     } catch(err) {
-        res.status(401).send(err.message);
+      res.status(401).json({ error : err.message });
     }
 })
 //내가 잡은 포켓몬들 보여주기
@@ -82,7 +82,7 @@ router.get('/mypokemon',isLoggedIn,async (req,res) => {
         const pokeIds = pokemons.map(item => item.pokeid);
         res.status(200).json(pokeIds);
     }catch(err){
-        res.status(401).send(err.message);
+      res.status(401).json({ error : err.message });
     }
 })
 module.exports = router;
