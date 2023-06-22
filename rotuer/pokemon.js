@@ -14,12 +14,12 @@ router.get("/idsearch",isLoggedIn, (req, res) => {
       res.status(200).send(result);
     })
     .catch((error) => {
-      res.status(401).send(err);
+        res.status(401).json({ error: error.message });
     });
 });
 //db에 저장
 async function save() {
-  for (let i = 1; i <= 386; i++) {
+  for (let i = 387; i <= 493; i++) {
     try {
       const result = await Pokeidsearch(i);
       // console.log(result.name);
@@ -32,6 +32,7 @@ async function save() {
         type2: result.type2,
         imageurl: result.imageurl,
         imagegif: result.imagegif,
+        hp:result.hp
       });
     } catch (err) {
       console.error(err);
@@ -41,11 +42,11 @@ async function save() {
 //포켓몬 전체조회
 router.get("/page",isLoggedIn, async (req, res) => {
   try {
-    searchAll(req.body).then((result) => {
+    searchAll().then((result) => {
       res.status(200).json(result);
     });
   } catch (err) {
-    res.status(401).send(err.message);
+    res.status(401).json({ error : err.message });
   }
 });
 
@@ -57,7 +58,7 @@ router.get("/dbidsearch",isLoggedIn, (req, res) => {
       res.status(200).send(result);
     })
     .catch((err) => {
-      res.status(401).send(err.message);
+        res.status(401).json({ error : err.message });
     });
 });
 //db에 이름으로 포켓몬 검색
@@ -68,7 +69,7 @@ router.get("/namesearch",isLoggedIn, async (req, res) => {
 
     res.status(200).json(result);
   } catch (err) {
-    res.status(401).send(err.message);
+    res.status(401).json({ error : err.message });
   }
 });
 
@@ -81,24 +82,20 @@ router.get("/namesearch",isLoggedIn, async (req, res) => {
 //     })
 // })
 //포켓몬 잡으면 mypokemondb에 저장
-router.post("/catchpoke",isLoggedIn,async (req,res)=>{
-    try{
-        const num = 3;
-        const tokenbearer = req.headers.authorization;
-        const token = tokenbearer.substring(7);
-        const useremail = tokenUtil.verifyToken(token).email;
-        const userid =await Idfind(useremail);
-    const pokeid = req.body.pokeid;
-    const result = await catchPoke(userid,pokeid);
-    const user_num = Math.floor(Math.random() * 4);
-        if(num !== user_num)
-            throw new Error("25% 확률 잡기 실패!")
-    if(result instanceof Error)
+router.post("/catchpoke", isLoggedIn, async (req, res) => {
+    try {
+      const tokenbearer = req.headers.authorization;
+      const token = tokenbearer.substring(7);
+      const useremail = tokenUtil.verifyToken(token).email;
+      const userid = await Idfind(useremail);
+      const pokeid = req.body.pokeid;
+      const result = await catchPoke(userid, pokeid);
+      if (result instanceof Error)
         throw result;
-        res.status(200).json(result);
-    }catch(err){
-        res.status(401).send(err.message);
+      res.status(200).json(result);
+    } catch (err) {
+    res.status(401).json({ error: err.message });
     }
-})
+  });
 
 module.exports = { router, save };
