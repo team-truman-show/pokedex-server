@@ -1,4 +1,4 @@
-const Pokemon = require("../models/pokemons");
+const Pokemon = require("../../models/pokemons");
 
 async function search(name) {
   try {
@@ -12,15 +12,14 @@ async function search(name) {
   } catch (err) {
     return err.message;
   }
-};
+}
 async function searchAll() {
   try {
-    const pokemons = await Pokemon.findAll({
-    });
+    const pokemons = await Pokemon.findAll({});
     return pokemons;
   } catch (err) {
     return err.message;
   }
 }
 
-module.exports = {search,searchAll};
+module.exports = { search, searchAll };

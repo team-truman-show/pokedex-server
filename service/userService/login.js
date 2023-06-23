@@ -1,15 +1,18 @@
-const User = require("../models/users");
-const tokenUtil = require("../lib/tokenUtil");
-const { verifyPassword } = require("../lib/passwordUtil");
+const { findUser } = require("../../dao/userDao/joinDao");
+const tokenUtil = require("../../lib/tokenUtil");
+const { verifyPassword } = require("../../lib/passwordUtil");
 
 async function performLogin(email, password) {
   try {
-    const user = await User.findOne({
-      where: { email: email },
-    });
+    const user = await findUser(email);
     if (!user) {
       return new Error("회원가입 하세요");
     }
+    if (!password) {
+      return new Error("비밀번호를 입력해주세요");
+    }
+
+    //비밀번호 검증
     const isPasswordValid = await verifyPassword(
       password,
       user.salt,
