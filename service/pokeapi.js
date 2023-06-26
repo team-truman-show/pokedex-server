@@ -7,7 +7,7 @@ async function Pokeidsearch(id){
         const url2 = `https://pokeapi.co/api/v2/pokemon/${id}`
         const response1 = await superagent.get(url1);
         const response2 = await superagent.get(url2);
-        let name, feature,description,type1,type2,imageurl,imagegif;
+        let name, feature,description,type1,type2,imageurl,imagegif,hp,defense,attack,special_attack,special_defense,speed,capture_rate,evolution_url;
         for(let i = 0; i < response1.body.names.length; i++)
         if(response1.body.names[i].language.name === "ko"){
         name = response1.body.names[i].name;
@@ -29,6 +29,8 @@ async function Pokeidsearch(id){
             type2 = response2.body.types[1].type.name;
         imageurl = response2.body.sprites.other['official-artwork'].front_default;
         imagegif = response2.body.sprites.versions['generation-v']['black-white'].animated.front_default;
+        capture_rate = response1.body.capture_rate;
+        evolution_url = response1.body.evolution_chain.url.split('/')[6] -'0';
         const result = {
             name: name,
             feature : feature,
@@ -36,7 +38,9 @@ async function Pokeidsearch(id){
             type1 : type1,
             type2 : type2,
             imageurl : imageurl,
-            imagegif : imagegif
+            imagegif : imagegif,
+            capture_rate : capture_rate,
+            evolution_url: evolution_url,
         }
         return result;
     } catch(err) {
@@ -58,7 +62,8 @@ async function Pokemonidsearch(id){
             type1: pokemon.dataValues.type1,
             type2: pokemon.dataValues.type2,
             imageurl: pokemon.dataValues.imageurl,
-            imagegif: pokemon.dataValues.imagegif
+            imagegif: pokemon.dataValues.imagegif,
+            evolution_url : pokemon.dataValues.evolution_url,
         }
         return result;
     } catch(err){

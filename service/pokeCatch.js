@@ -21,10 +21,10 @@ async function catchPoke(userid, pokeid) {
     if (existingPokemon) {
       return new Error("이미 보유한 포켓몬입니다.");
     }
-    const num = 3;
-    const user_num = Math.floor(Math.random() * 4);
-      if (num !== user_num) {
-        throw new Error("25% 확률 잡기 실패!");
+    const num = pokemon.capture_rate / 255;
+    const user_num = Math.random();
+      if (num < user_num) {
+        throw new Error(`${Math.floor(num * 100)}% 확률 잡기 실패!`);
       }
 
     await Mypokemon.create({

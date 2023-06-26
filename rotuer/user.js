@@ -7,6 +7,7 @@ const {isLoggedIn} = require('../lib/loginUtil');
 const tokenUtil = require('../lib/tokenUtil');
 const informSearch = require('../service/myInformation');
 const Mypokemoninfo = require('../service/myPokemon');
+
 //로그인
 router.post("/login", (req, res) => {
   const email = req.body.email;

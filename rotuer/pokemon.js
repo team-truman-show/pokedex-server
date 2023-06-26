@@ -19,7 +19,7 @@ router.get("/idsearch",isLoggedIn, (req, res) => {
 });
 //db에 저장
 async function save() {
-  for (let i = 387; i <= 493; i++) {
+  for (let i = 1; i <= 1009; i++) {
     try {
       const result = await Pokeidsearch(i);
       // console.log(result.name);
@@ -32,7 +32,17 @@ async function save() {
         type2: result.type2,
         imageurl: result.imageurl,
         imagegif: result.imagegif,
-        hp:result.hp
+        hp: result.hp,
+        attack: result.attack,
+        special_attack: result.special_attack,
+        defense:
+        result.defense,
+        special_defense:
+        result.special_defense,
+        speed:
+        result.speed,
+        capture_rate: result.capture_rate,
+        evolution_url : result.evolution_url,
       });
     } catch (err) {
       console.error(err);
@@ -62,7 +72,7 @@ router.get("/dbidsearch",isLoggedIn, (req, res) => {
     });
 });
 //db에 이름으로 포켓몬 검색
-router.get("/namesearch",isLoggedIn, async (req, res) => {
+router.get("/namesearch", async (req, res) => {
   try {
     const name = req.query.name;
     const result = await search(name);
