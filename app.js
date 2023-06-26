@@ -1,6 +1,7 @@
 const express = require("express");
 const models = require("./models/index");
 const userRouter = require("./rotuer/user");
+const myPokemonRouter = require('./rotuer/mypokemon');
 const bodyParser = require("body-parser");
 const pokemonRouter = require("./rotuer/pokemon");
 const cors = require("cors");
@@ -22,6 +23,8 @@ const corsOptions = {
 app.use(cors(corsOptions));
 app.use("/user", userRouter);
 app.use("/pokemon", pokemonRouter.router);
+app.use("/myPokemon",myPokemonRouter);
+
 // pokemonRouter.save();
 models.sequelize
   .authenticate()

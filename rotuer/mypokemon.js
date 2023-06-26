@@ -1,16 +1,18 @@
 const express = require("express");
 const router = express.Router();
-const Idfind = require("../service/userService/idsearch");
+const userSearch = require("../service/userService/userSearch");
 const { catchPoke } = require("../service/mypokemonService/pokeCatch");
 const Mypokemoninfo = require("../service/mypokemonService/mypokemon");
 const tokenUtil = require("../lib/tokenUtil");
+const { isLoggedIn } = require("../lib/loginUtil");
 //포켓몬 잡으면 mypokemondb에 저장
 router.post("/catchpoke", isLoggedIn, async (req, res) => {
   try {
     const tokenbearer = req.headers.authorization;
     const token = tokenbearer.substring(7);
     const useremail = tokenUtil.verifyToken(token).email;
-    const userid = await Idfind(useremail);
+    const user = await userSearch(useremail);
+    const userid = user.id;
     const pokeid = req.body.pokeid;
     const result = await catchPoke(userid, pokeid);
     if (result instanceof Error) throw result;
@@ -25,8 +27,8 @@ router.get("/mypokemon", isLoggedIn, async (req, res) => {
     const tokenbearer = req.headers.authorization;
     const token = tokenbearer.substring(7);
     const myemail = tokenUtil.verifyToken(token).email;
-    const myinfo = await informSearch(myemail);
-    const myid = myinfo.id;
+    const user = await userSearch(myemail);
+    const myid = user.id;
     const pokemons = await Mypokemoninfo(myid);
     const pokeIds = pokemons.map((item) => item.pokeid);
     res.status(200).json(pokeIds);

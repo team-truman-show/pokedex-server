@@ -1,9 +1,10 @@
+const Sequelize = require('sequelize');
 
 module.exports = class Pokemon extends Sequelize.Model {
     static init(sequelize){
         return super.init({
             id: {
-                type:Sequelize.INTEGER,
+                type: Sequelize.INTEGER,
                 primaryKey: true
             },
             name: {
@@ -13,11 +14,9 @@ module.exports = class Pokemon extends Sequelize.Model {
             },
             feature: {
                 type: Sequelize.STRING(50),
-                allowNull: false,
             },
             description: {
                 type: Sequelize.STRING(500),
-                allowNull: false
             },
             type1: {
                 type: Sequelize.STRING(20),
@@ -32,6 +31,12 @@ module.exports = class Pokemon extends Sequelize.Model {
             },
             imagegif: {
                 type: Sequelize.STRING(300),
+            },
+            capture_rate:{
+                type: Sequelize.INTEGER
+            },
+            evolution_url: {
+                type: Sequelize.INTEGER
             }
         }, {
             sequelize,
