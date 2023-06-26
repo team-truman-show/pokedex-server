@@ -1,2 +1,2 @@
 # pokedex-server
-Pokémon Illustrated Guide - BackEnd
+Pokémon Illustrated Guide - Back End
