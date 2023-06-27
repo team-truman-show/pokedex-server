@@ -1,10 +1,12 @@
 const express = require("express");
 const models = require("./models/index");
-const userRouter = require("./rotuer/user");
-const myPokemonRouter = require('./rotuer/mypokemon');
+const userRouter = require("./router/user");
+const myPokemonRouter = require("./router/mypokemon");
 const bodyParser = require("body-parser");
-const pokemonRouter = require("./rotuer/pokemon");
+const pokemonRouter = require("./router/pokemon");
+const bringUpRouter = require("./router/pokeBringUp");
 const cors = require("cors");
+// const { save } = require("./API/pokesave");
 const app = express();
 
 // body-parser 미들웨어 설정
@@ -23,9 +25,10 @@ const corsOptions = {
 app.use(cors(corsOptions));
 app.use("/user", userRouter);
 app.use("/pokemon", pokemonRouter.router);
-app.use("/myPokemon",myPokemonRouter);
+app.use("/myPokemon", myPokemonRouter);
+app.use("/bringup", bringUpRouter);
 
-// pokemonRouter.save();
+// save();
 models.sequelize
   .authenticate()
   .then(() => {

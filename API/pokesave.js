@@ -16,7 +16,9 @@ async function save() {
         imageurl: result.imageurl,
         imagegif: result.imagegif,
         capture_rate: result.capture_rate,
-        evolution_url : result.evolution_url,
+        evolution_url: result.evolution_url,
+        nextevolves: result.nextevolves,
+        possibility: result.possibility,
       });
     } catch (err) {
       console.error(err);

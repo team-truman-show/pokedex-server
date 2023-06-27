@@ -5,7 +5,6 @@ async function findUser(email) {
     const exUser = await User.findOne({
       where: { email: email },
     });
-
     return exUser;
   } catch (err) {
     throw new Error("찾기실패", err);

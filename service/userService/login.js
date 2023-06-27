@@ -28,13 +28,13 @@ async function performLogin(email, password) {
   }
 }
 
-async function Login(email, password) {
+async function Login(email, password, nick) {
   try {
     const isLoginSuccessful = await performLogin(email, password);
 
     if (isLoginSuccessful instanceof Error) throw isLoginSuccessful;
     if (isLoginSuccessful) {
-      const token = tokenUtil.makeToken(email);
+      const token = tokenUtil.makeToken(email, nick);
       return token;
     }
     throw new Error("로그인 실패");
