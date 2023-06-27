@@ -4,12 +4,25 @@ module.exports = class Mypokemon extends Sequelize.Model {
   static init(sequelize) {
     return super.init(
       {
-        id: {
+        // id: {
+        //   type: Sequelize.INTEGER,
+        //   primaryKey: true,
+        // },
+
+        // 씻기기
+        clean: {
           type: Sequelize.INTEGER,
-          primaryKey: true,
+          defaultValue: 50,
         },
-        likeability: {
+        // 먹이기
+        full: {
           type: Sequelize.INTEGER,
+          defaultValue: 50,
+        },
+        // 산책하기
+        intimate: {
+          type: Sequelize.INTEGER,
+          defaultValue: 50,
         },
       },
       {
