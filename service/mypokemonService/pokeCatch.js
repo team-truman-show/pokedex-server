@@ -8,13 +8,13 @@ async function catchPoke(userid, pokeid) {
 
     if (!user) return new Error("유저 정보를 찾을 수 없습니다");
     const pokemon = await Pokemon.findOne({
-      where: { id: pokeid },
-    });
-
+      where: { id: pokeid },    
+    });  
+    
     if (!pokemon) return new Error("정확한 포켓몬이 아닙니다.");
-
-    if (!pokemon.posibility) return new Error("잡을 수 없는 포켓몬 입니다.");
-
+    
+      if (!pokemon.possibility) return new Error("잡을 수 없는 포켓몬 입니다.");
+ 
     const existingPokemon = await Mypokemon.findOne({
       where: {
         userid: userid,
