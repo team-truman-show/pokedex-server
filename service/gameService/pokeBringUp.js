@@ -1,4 +1,4 @@
-const { User, Pokemon, Mypokemon } = require("../../models/index");
+const { User, Mypokemon } = require("../../models/index");
 
 //////////// 목욕
 async function Pokeclean(userid, mypokeid, clean) {

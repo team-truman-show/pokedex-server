@@ -1,6 +1,5 @@
 const superagent = require("superagent");
 const Pokemon = require("../models/pokemons");
-const Evolve = require("../models/evolves");
 
 async function recursive(id, x, a) {
   if (a === true) {

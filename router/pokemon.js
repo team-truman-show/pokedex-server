@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const { search, searchAll } = require("../service/pokemonService/pokesearch");
-const { PokemonEvolve } = require("../service/gameService/evolve");
+const { PokeEvolveSearch } = require("../service/evolveService/evolve");
 const { isLoggedIn } = require("../lib/loginUtil");
 const { Pokeidsearch, Pokemonidsearch } = require("../API/pokeapi");
 
@@ -50,10 +50,10 @@ router.get("/namesearch", isLoggedIn, async (req, res) => {
   }
 });
 
-router.get("/evolve", isLoggedIn, async (req, res) => {
+router.get("/evolve-search", isLoggedIn, async (req, res) => {
   try {
     const pokeid = req.query.pokeid;
-    const result = await PokemonEvolve(pokeid);
+    const result = await PokeEvolveSearch(pokeid);
 
     res.status(200).json(result);
   } catch (err) {
