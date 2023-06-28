@@ -5,7 +5,7 @@ const { isLoggedIn } = require("../lib/loginUtil");
 const { Pokeidsearch, Pokemonidsearch } = require("../API/pokeapi");
 
 //포켓몬 id 검색
-router.get("/idsearch", isLoggedIn, (req, res) => {
+router.get("/idsearch", (req, res) => {
   Pokeidsearch(req.query.id)
     .then((result) => {
       res.status(200).send(result);
@@ -27,7 +27,7 @@ router.get("/page", isLoggedIn, async (req, res) => {
 });
 
 //db에 id로 포켓몬 검색
-router.get("/dbidsearch", isLoggedIn, (req, res) => {
+router.get("/dbidsearch", (req, res) => {
   Pokemonidsearch(req.query.id)
     .then((result) => {
       if (result instanceof Error) throw result;
@@ -38,7 +38,7 @@ router.get("/dbidsearch", isLoggedIn, (req, res) => {
     });
 });
 //db에 이름으로 포켓몬 검색
-router.get("/namesearch", isLoggedIn, async (req, res) => {
+router.get("/namesearch", async (req, res) => {
   try {
     const name = req.query.name;
     const result = await search(name);

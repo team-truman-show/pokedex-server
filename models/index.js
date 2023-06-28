@@ -1,5 +1,4 @@
-
-const {sequelize} = require('./connection');
+const { sequelize } = require('./connection');
 const User = require('./users');
 const Pokemon = require('./pokemons');
 const Mypokemon = require('./mypokemons');
@@ -7,7 +6,6 @@ const Mypokemon = require('./mypokemons');
 const db = {};
 
 db.sequelize = sequelize;
-
 
 db.User = User;
 db.Pokemon = Pokemon;

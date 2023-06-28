@@ -1,74 +1,111 @@
 const superagent = require('superagent');
 const Pokemon = require('../models/pokemons');
 
-async function Pokeidsearch(id){
-    try{
-        const url1 = `https://pokeapi.co/api/v2/pokemon-species/${id}`;
-        const url2 = `https://pokeapi.co/api/v2/pokemon/${id}`
-        const response1 = await superagent.get(url1);
-        const response2 = await superagent.get(url2);
-        let name, feature,description,type1,type2,imageurl,imagegif,hp,defense,attack,special_attack,special_defense,speed,capture_rate,evolution_url;
-        for(let i = 0; i < response1.body.names.length; i++)
-        if(response1.body.names[i].language.name === "ko"){
-        name = response1.body.names[i].name;
-        break;
-        }
-        for(let i = 0; i < response1.body.genera.length; i++)
-        if(response1.body.genera[i].language.name === "ko"){
-            feature = response1.body.genera[i].genus;
-            break;
-        }
-        for(let i = 0; i < response1.body.flavor_text_entries.length; i++)
-        if(response1.body.flavor_text_entries[i].language.name === "ko")
-        {
-            description = response1.body.flavor_text_entries[i].flavor_text;
-            break;
-        }
-        type1 = response2.body.types[0].type.name;
-        if(response2.body.types[1])
-            type2 = response2.body.types[1].type.name;
-        imageurl = response2.body.sprites.other['official-artwork'].front_default;
-        imagegif = response2.body.sprites.versions['generation-v']['black-white'].animated.front_default;
-        capture_rate = response1.body.capture_rate;
-        evolution_url = response1.body.evolution_chain.url.split('/')[6] -'0';
-        const result = {
-            name: name,
-            feature : feature,
-            description : description,
-            type1 : type1,
-            type2 : type2,
-            imageurl : imageurl,
-            imagegif : imagegif,
-            capture_rate : capture_rate,
-            evolution_url: evolution_url,
-        }
-        return result;
-    } catch(err) {
-        return err;
-    }
+async function recursive(id, x, a) {
+  if (a === true) {
+    if (!x.species.url) return null;
+    return x.species.url.split('/')[6] - '0';
+  }
+  const y = x.species.url.split('/')[6] - '0';
+  if (id == y) a = true;
+  if (!x.evolves_to[0]) return null;
+  if (x.evolves_to.length >= 2)
+    return recursive(
+      id,
+      x.evolves_to[Math.floor(Math.random() * x.evolves_to.length)],
+      a
+    );
+  return recursive(id, x.evolves_to[0], a);
 }
 
-async function Pokemonidsearch(id){
-    try{
-        const pokemon = await Pokemon.findOne({
-            where: { id: id }
-        });
-        if(!pokemon)
-            return new Error("일치하는 포켓몬이 없습니다.");
-        const result = {id : pokemon.dataValues.id,
-            name : pokemon.dataValues.name,
-            feature : pokemon.dataValues.feature,
-            description : pokemon.dataValues.description,
-            type1: pokemon.dataValues.type1,
-            type2: pokemon.dataValues.type2,
-            imageurl: pokemon.dataValues.imageurl,
-            imagegif: pokemon.dataValues.imagegif,
-            evolution_url : pokemon.dataValues.evolution_url,
-        }
-        return result;
-    } catch(err){
-        return err;
-    }
+async function Pokeidsearch(id) {
+  try {
+    const url1 = `https://pokeapi.co/api/v2/pokemon-species/${id}`;
+    const url2 = `https://pokeapi.co/api/v2/pokemon/${id}`;
+    const response1 = await superagent.get(url1);
+    const response2 = await superagent.get(url2);
+    let name,
+      feature,
+      description,
+      type1,
+      type2,
+      imageurl,
+      imagegif,
+      capture_rate,
+      evolution_url,
+      nextevolves,
+      posibility;
+    for (let i = 0; i < response1.body.names.length; i++)
+      if (response1.body.names[i].language.name === 'ko') {
+        name = response1.body.names[i].name;
+        break;
+      }
+    for (let i = 0; i < response1.body.genera.length; i++)
+      if (response1.body.genera[i].language.name === 'ko') {
+        feature = response1.body.genera[i].genus;
+        break;
+      }
+    for (let i = 0; i < response1.body.flavor_text_entries.length; i++)
+      if (response1.body.flavor_text_entries[i].language.name === 'ko') {
+        description = response1.body.flavor_text_entries[i].flavor_text;
+        break;
+      }
+    type1 = response2.body.types[0].type.name;
+    if (response2.body.types[1]) type2 = response2.body.types[1].type.name;
+    imageurl = response2.body.sprites.other['official-artwork'].front_default;
+    imagegif =
+      response2.body.sprites.versions['generation-v']['black-white'].animated
+        .front_default;
+    capture_rate = response1.body.capture_rate;
+    evolution_url = response1.body.evolution_chain.url.split('/')[6] - '0';
+    const url3 = `https://pokeapi.co/api/v2/evolution-chain/${evolution_url}/`;
+    const response3 = await superagent(url3);
+    let little = response3.body.chain.species.url.split('/')[6];
+    posibility = 0;
+    if (little == id) posibility = 1;
+    nextevolves = await recursive(id, response3.body.chain, false);
+    const result = {
+      name: name,
+      feature: feature,
+      description: description,
+      type1: type1,
+      type2: type2,
+      imageurl: imageurl,
+      imagegif: imagegif,
+      capture_rate: capture_rate,
+      evolution_url: evolution_url,
+      posibility: posibility,
+      nextevolves: nextevolves,
+    };
+    return result;
+  } catch (err) {
+    return err;
+  }
+}
+
+async function Pokemonidsearch(id) {
+  try {
+    const pokemon = await Pokemon.findOne({
+      where: { id: id },
+    });
+    if (!pokemon) return new Error('일치하는 포켓몬이 없습니다.');
+    const result = {
+      id: pokemon.dataValues.id,
+      name: pokemon.dataValues.name,
+      feature: pokemon.dataValues.feature,
+      description: pokemon.dataValues.description,
+      type1: pokemon.dataValues.type1,
+      type2: pokemon.dataValues.type2,
+      imageurl: pokemon.dataValues.imageurl,
+      imagegif: pokemon.dataValues.imagegif,
+      evolution_url: pokemon.dataValues.evolution_url,
+      posibility: pokemon.dataValues.posibility,
+      nextevolves: pokemon.dataValues.nextevolves,
+    };
+    return result;
+  } catch (err) {
+    return err;
+  }
 }
 
 // async function Pokenamesearch(name){
@@ -129,4 +166,4 @@ async function Pokemonidsearch(id){
 // }
 // }
 
-module.exports = {Pokeidsearch, Pokemonidsearch};
+module.exports = { Pokeidsearch, Pokemonidsearch };
