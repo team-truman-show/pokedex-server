@@ -1,38 +1,44 @@
-const superagent = require("superagent");
-const Pokemon = require("../models/pokemons");
+const superagent = require("superagent"); // superagent 모듈을 import합니다.
+const Pokemon = require("../models/pokemons"); // Pokemon 모델을 import합니다.
+const Evolve = require("../models/evolves"); // Evolve 모델을 import합니다.
 
-async function recursive(id, x, a) {
+// 주어진 포켓몬 ID의 진화 체인을 재귀적으로 탐색하는 함수입니다.
+// pokeid는 현재 포켓몬의 ID를 나타냅니다.
+async function recursive(id, x, a, pokeid) {
   if (a === true) {
     if (!x.species.url) return null;
-    // return x.species.url.split("/")[6] - "0";
-    return Number(x.species.url.split("/")[6]);
+    const evolveId = Number(x.species.url.split("/")[6]);
+    // Evolve 모델에 pokeid와 evolve_id 값을 가진 레코드를 생성합니다.
+    await Evolve.create({ pokeid, evolve_id: evolveId });
+    return evolveId;
   }
 
-  //   const y = x.species.url.split("/")[6] - "0";
   const y = Number(x.species.url.split("/")[6]);
   if (id == y) a = true;
 
   if (!x.evolves_to[0]) return null;
-  //   if (x.evolves_to.length >= 2)
-  //     return recursive(
-  //       id,
-  //       x.evolves_to[Math.floor(Math.random() * x.evolves_to.length)],
-  //       a
-  //     );
-  //   return recursive(id, x.evolves_to[0], a);
+
   if (x.evolves_to.length >= 2) {
-    const randomIndex = Math.floor(Math.random() * x.evolves_to.length);
-    return recursive(id, x.evolves_to[randomIndex], a);
+    const evolveIds = x.evolves_to.map((evolve) =>
+      Number(evolve.species.url.split("/")[6])
+    );
+    for (const evolveId of evolveIds) {
+      // Evolve 모델에 pokeid와 evolve_id 값을 가진 레코드를 생성합니다.
+      await Evolve.create({ pokeid, evolve_id: evolveId });
+    }
+    return recursive(id, x.evolves_to[0], a, pokeid);
   }
 
-  return recursive(id, x.evolves_to[0], a);
+  return recursive(id, x.evolves_to[0], a, pokeid);
 }
 
+// 주어진 포켓몬 ID에 대한 정보를 검색하는 함수입니다.
 async function Pokeidsearch(id) {
   try {
     const speciesUrl = `https://pokeapi.co/api/v2/pokemon-species/${id}`;
     const pokemonUrl = `https://pokeapi.co/api/v2/pokemon/${id}`;
 
+    // PokeAPI에서 포켓몬의 종류(species)와 세부 정보(pokemon)를 가져옵니다.
     const speciesResponse = await superagent.get(speciesUrl);
     const pokemonResponse = await superagent.get(pokemonUrl);
 
@@ -48,6 +54,7 @@ async function Pokeidsearch(id) {
       nextevolves,
       possibility;
 
+    // 포켓몬의 이름을 가져옵니다.
     for (let i = 0; i < speciesResponse.body.names.length; i++) {
       if (speciesResponse.body.names[i].language.name === "ko") {
         name = speciesResponse.body.names[i].name;
@@ -55,6 +62,7 @@ async function Pokeidsearch(id) {
       }
     }
 
+    // 포켓몬의 특징(일반적인 설명)을 가져옵니다.
     for (let i = 0; i < speciesResponse.body.genera.length; i++) {
       if (speciesResponse.body.genera[i].language.name === "ko") {
         feature = speciesResponse.body.genera[i].genus;
@@ -62,6 +70,7 @@ async function Pokeidsearch(id) {
       }
     }
 
+    // 포켓몬의 설명을 가져옵니다.
     for (let i = 0; i < speciesResponse.body.flavor_text_entries.length; i++) {
       if (speciesResponse.body.flavor_text_entries[i].language.name === "ko") {
         description = speciesResponse.body.flavor_text_entries[i].flavor_text;
@@ -69,26 +78,30 @@ async function Pokeidsearch(id) {
       }
     }
 
+    // 포켓몬의 타입을 가져옵니다.
     type1 = pokemonResponse.body.types[0].type.name;
     if (pokemonResponse.body.types[1]) {
       type2 = pokemonResponse.body.types[1].type.name;
     }
 
+    // 포켓몬의 이미지 URL을 가져옵니다.
     imageurl =
       pokemonResponse.body.sprites.other["official-artwork"].front_default;
     imagegif =
       pokemonResponse.body.sprites.versions["generation-v"]["black-white"]
         .animated.front_default;
 
+    // 포켓몬의 포획률을 가져옵니다.
     capture_rate = speciesResponse.body.capture_rate;
-    evolution_url =
-      //   speciesResponse.body.evolution_chain.url.split("/")[6] - "0";
-      Number(speciesResponse.body.evolution_chain.url.split("/")[6]);
+
+    // 포켓몬의 진화 정보 URL을 가져옵니다.
+    evolution_url = Number(
+      speciesResponse.body.evolution_chain.url.split("/")[6]
+    );
 
     const evolutionChainUrl = `https://pokeapi.co/api/v2/evolution-chain/${evolution_url}/`;
-    const evolutionChainResponse = await superagent(evolutionChainUrl);
+    const evolutionChainResponse = await superagent.get(evolutionChainUrl);
 
-    // let little = evolutionChainResponse.body.chain.species.url.split("/")[6];
     const little = Number(
       evolutionChainResponse.body.chain.species.url.split("/")[6]
     );
@@ -98,8 +111,15 @@ async function Pokeidsearch(id) {
       possibility = true;
     }
 
-    nextevolves = await recursive(id, evolutionChainResponse.body.chain, false);
+    // 포켓몬의 다음 진화 정보를 재귀적으로 탐색합니다.
+    nextevolves = await recursive(
+      id,
+      evolutionChainResponse.body.chain,
+      false,
+      id
+    );
 
+    // 포켓몬 정보를 객체로 구성하여 반환합니다.
     const result = {
       name: name,
       feature: feature,
@@ -113,6 +133,7 @@ async function Pokeidsearch(id) {
       nextevolves: nextevolves,
       possibility: possibility,
     };
+
     return result;
   } catch (err) {
     return err;

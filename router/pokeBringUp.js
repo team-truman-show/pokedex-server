@@ -13,7 +13,7 @@ const {
 // 포켓몬 상태 받아와서 DB에 저장 수정.
 //청결
 
-router.patch("/pokeclean", isLoggedIn, async (req, res) => {
+router.patch("/clean", isLoggedIn, async (req, res) => {
   try {
     const tokenbearer = req.headers.authorization;
     const token = tokenbearer.substring(7);
@@ -25,12 +25,12 @@ router.patch("/pokeclean", isLoggedIn, async (req, res) => {
     const result = await Pokeclean(myid, myPokeid, clean);
     res.status(200).json(result);
   } catch (err) {
-    res.status(404).json({ error: err.message });
+    res.status(401).json({ error: err.message });
   }
 });
 
 //포만도
-router.patch("/pokefull", isLoggedIn, async (req, res) => {
+router.patch("/full", isLoggedIn, async (req, res) => {
   try {
     const tokenbearer = req.headers.authorization;
     const token = tokenbearer.substring(7);
@@ -42,12 +42,12 @@ router.patch("/pokefull", isLoggedIn, async (req, res) => {
     const result = await Pokefull(myid, myPokeid, full);
     res.status(200).json(result);
   } catch (err) {
-    res.status(404).json({ error: err.message });
+    res.status(401).json({ error: err.message });
   }
 });
 
 //산책
-router.patch("/pokeintimate", isLoggedIn, async (req, res) => {
+router.patch("/intimate", isLoggedIn, async (req, res) => {
   try {
     const tokenbearer = req.headers.authorization;
     const token = tokenbearer.substring(7);
@@ -59,7 +59,7 @@ router.patch("/pokeintimate", isLoggedIn, async (req, res) => {
     const result = await Pokeintimate(myid, myPokeid, intimate);
     res.status(200).json(result);
   } catch (err) {
-    res.status(404).json({ error: err.message });
+    res.status(401).json({ error: err.message });
   }
 });
 
