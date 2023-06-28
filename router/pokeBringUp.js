@@ -20,10 +20,9 @@ router.patch("/pokeclean", isLoggedIn, async (req, res) => {
     const myemail = tokenUtil.verifyToken(token).email;
     const user = await userSearch(myemail);
     const myid = user.id;
-    const myPokeid = req.body.pokeid;
+    const myPokeid = req.body.mypokeid;
     const clean = req.body.clean;
     const result = await Pokeclean(myid, myPokeid, clean);
-    console.log(result);
     res.status(200).json(result);
   } catch (err) {
     res.status(404).json({ error: err.message });
@@ -38,10 +37,9 @@ router.patch("/pokefull", isLoggedIn, async (req, res) => {
     const myemail = tokenUtil.verifyToken(token).email;
     const user = await userSearch(myemail);
     const myid = user.id;
-    const myPokeid = req.body.pokeid;
+    const myPokeid = req.body.mypokeid;
     const full = req.body.full;
     const result = await Pokefull(myid, myPokeid, full);
-    console.log(result);
     res.status(200).json(result);
   } catch (err) {
     res.status(404).json({ error: err.message });
@@ -56,10 +54,9 @@ router.patch("/pokeintimate", isLoggedIn, async (req, res) => {
     const myemail = tokenUtil.verifyToken(token).email;
     const user = await userSearch(myemail);
     const myid = user.id;
-    const myPokeid = req.body.pokeid;
+    const myPokeid = req.body.mypokeid;
     const intimate = req.body.intimate;
     const result = await Pokeintimate(myid, myPokeid, intimate);
-    console.log(result);
     res.status(200).json(result);
   } catch (err) {
     res.status(404).json({ error: err.message });

@@ -1,7 +1,7 @@
 const { User, Pokemon, Mypokemon } = require("../../models/index");
 
-//////////// 산책
-async function Pokeclean(userid, pokeid, clean) {
+//////////// 목욕
+async function Pokeclean(userid, mypokeid, clean) {
   try {
     //유저조회
     const user = await User.findOne({
@@ -9,14 +9,11 @@ async function Pokeclean(userid, pokeid, clean) {
     });
     if (!user) return new Error("유저 정보를 찾을 수 없습니다");
     //포켓몬조회
-    const pokemon = await Pokemon.findOne({
-      where: { id: pokeid },
-    });
-    if (!pokemon) return new Error("정확한 포켓몬이 아닙니다.");
-    //내포켓몬 조회
     const myPokemon = await Mypokemon.findOne({
-      where: { userid, pokeid },
+      where: { id: mypokeid },
     });
+    //내포켓몬 조회
+
     if (!myPokemon)
       return new Error("해당 유저와 포켓몬에 대한 정보를 찾을 수 없습니다.");
 
@@ -30,7 +27,7 @@ async function Pokeclean(userid, pokeid, clean) {
 }
 
 //////////// 포만도
-async function Pokefull(userid, pokeid, full) {
+async function Pokefull(userid, mypokeid, full) {
   try {
     //유저조회
     const user = await User.findOne({
@@ -38,20 +35,14 @@ async function Pokefull(userid, pokeid, full) {
     });
     if (!user) return new Error("유저 정보를 찾을 수 없습니다");
     //포켓몬조회
-    const pokemon = await Pokemon.findOne({
-      where: { id: pokeid },
-    });
-    if (!pokemon) return new Error("정확한 포켓몬이 아닙니다.");
-    //내포켓몬 조회
     const myPokemon = await Mypokemon.findOne({
-      where: { userid, pokeid },
+      where: { id: mypokeid },
     });
     if (!myPokemon)
       return new Error("해당 유저와 포켓몬에 대한 정보를 찾을 수 없습니다.");
 
     myPokemon.full = full;
     await myPokemon.save();
-
     return myPokemon;
   } catch (err) {
     return err;
@@ -59,7 +50,7 @@ async function Pokefull(userid, pokeid, full) {
 }
 
 ////////// 산책
-async function Pokeintimate(userid, pokeid, intimate) {
+async function Pokeintimate(userid, mypokeid, intimate) {
   try {
     //유저조회
     const user = await User.findOne({
@@ -67,13 +58,8 @@ async function Pokeintimate(userid, pokeid, intimate) {
     });
     if (!user) return new Error("유저 정보를 찾을 수 없습니다");
     //포켓몬조회
-    const pokemon = await Pokemon.findOne({
-      where: { id: pokeid },
-    });
-    if (!pokemon) return new Error("정확한 포켓몬이 아닙니다.");
-    //내포켓몬 조회
     const myPokemon = await Mypokemon.findOne({
-      where: { userid, pokeid },
+      where: { id: mypokeid },
     });
     if (!myPokemon)
       return new Error("해당 유저와 포켓몬에 대한 정보를 찾을 수 없습니다.");

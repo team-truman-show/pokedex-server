@@ -30,7 +30,7 @@ async function evolve() {
   const pokemons = await Pokemon.findAll({});
   for (let pokemon of pokemons) {
     const evolutionChainUrl = `https://pokeapi.co/api/v2/evolution-chain/${pokemon.evolution_url}/`;
-    console.log(`evolutionChainUrl : ${evolutionChainUrl}`);
+    // console.log(`evolutionChainUrl : ${evolutionChainUrl}`);
     const evolutionChainResponse = await superagent(evolutionChainUrl);
     const nextevolves = await recursive(
       pokemon.id,
@@ -38,9 +38,9 @@ async function evolve() {
       false,
       []
     );
-    console.log(
-      util.inspect(nextevolves, false, null, true /* enable colors */)
-    );
+    // console.log(
+    //   util.inspect(nextevolves, false, null, true /* enable colors */)
+    // );
     for (let i = 0; i < nextevolves.length; i++) {
       const isExistEvolve = await Evolve.findOne({
         where: {
