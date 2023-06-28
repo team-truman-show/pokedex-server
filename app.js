@@ -7,6 +7,7 @@ const pokemonRouter = require("./router/pokemon");
 const bringUpRouter = require("./router/pokeBringUp");
 const cors = require("cors");
 // const { save } = require("./API/pokesave");
+// const { evolve } = require("./API/evolve");
 const app = express();
 
 // body-parser 미들웨어 설정
@@ -29,6 +30,8 @@ app.use("/myPokemon", myPokemonRouter);
 app.use("/bringup", bringUpRouter);
 
 // save();
+// evolve();
+
 models.sequelize
   .authenticate()
   .then(() => {

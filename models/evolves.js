@@ -3,7 +3,11 @@ const Sequelize = require("sequelize");
 module.exports = class Evolve extends Sequelize.Model {
   static init(sequelize) {
     return super.init(
-      {},
+      {
+        evolve_id: {
+          type: Sequelize.INTEGER,
+        },
+      },
       {
         sequelize,
         underscored: true,
