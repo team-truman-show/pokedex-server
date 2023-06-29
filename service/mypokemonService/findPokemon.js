@@ -1,11 +1,10 @@
 const { Mypokemon } = require('../../models/index');
 
-async function findPokemon(userid, pokeid) {
+async function findPokemon(mypokeid) {
   try {
     const mypokemon = Mypokemon.findOne({
       where: {
-        userid: userid,
-        pokeid: pokeid,
+        id: mypokeid,
       },
     });
     if (!mypokemon) throw new Error('포켓몬이 없습니다.');
