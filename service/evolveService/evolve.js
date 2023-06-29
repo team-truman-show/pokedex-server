@@ -1,3 +1,4 @@
+
 const { User, Mypokemon, Pokemon, Evolve } = require("../../models/index");
 
 async function PokeEvolveSearch(pokeid) {
@@ -14,14 +15,8 @@ async function PokeEvolveSearch(pokeid) {
   }
 }
 
-async function PokeEvolve(userid, pokeid, mypokeid) {
+async function PokeEvolve(pokeid, mypokeid) {
   try {
-    // 유저 조회
-    const user = await User.findOne({
-      where: { id: userid },
-    });
-    if (!user) return new Error("유저 정보를 찾을 수 없습니다");
-
     // 포켓몬 조회
     const pokemon = await Pokemon.findOne({
       where: { id: pokeid },
@@ -34,9 +29,8 @@ async function PokeEvolve(userid, pokeid, mypokeid) {
     });
     if (!myPokemon)
       throw new Error("해당 유저와 포켓몬에 대한 정보를 찾을 수 없습니다.");
-
     // 내 포켓몬 업데이트 및 초기화
-    myPokemon.pokeid = pokeid;
+    myPokemon.pokeid = pokemon.nextevolves;
     myPokemon.clean = 50;
     myPokemon.full = 50;
     myPokemon.intimate = 50;
@@ -45,7 +39,6 @@ async function PokeEvolve(userid, pokeid, mypokeid) {
 
     // 결과 값 출력
     console.log("🚀 ~ file: evolve.js:41 ~ PokeEvolve ~ myPokemon:", myPokemon);
-
     return myPokemon;
   } catch (err) {
     return err;

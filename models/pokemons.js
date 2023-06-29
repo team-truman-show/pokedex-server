@@ -4,10 +4,6 @@ module.exports = class Pokemon extends Sequelize.Model {
   static init(sequelize) {
     return super.init(
       {
-        id: {
-          type: Sequelize.INTEGER,
-          primaryKey: true,
-        },
         name: {
           type: Sequelize.STRING(30),
           unique: true,

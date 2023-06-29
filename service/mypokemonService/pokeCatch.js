@@ -23,7 +23,7 @@ async function catchPoke(userid, pokeid) {
     });
 
     if (existingPokemon) {
-      return new Error("이미 보유한 포켓몬입니다.");
+      return new Error('이미 보유한 포켓몬입니다.');
     }
 
     const num = pokemon.capture_rate / 255;
@@ -38,7 +38,7 @@ async function catchPoke(userid, pokeid) {
       pokeid: pokeid,
     });
 
-    return "잡기 성공";
+    return '잡기 성공';
   } catch (err) {
     return err;
   }

@@ -1,9 +1,11 @@
+
 const superagent = require("superagent");
 const Pokemon = require("../models/pokemons");
 
 async function recursive(id, x, a) {
   if (a === true) {
     if (!x.species.url) return null;
+
 
     return Number(x.species.url.split("/")[6]);
   }
@@ -126,6 +128,8 @@ async function Pokemonidsearch(id) {
       imageurl: pokemon.dataValues.imageurl,
       imagegif: pokemon.dataValues.imagegif,
       evolution_url: pokemon.dataValues.evolution_url,
+      nextevolves: pokemon.dataValues.nextevolves,
+      possibility: pokemon.dataValues.possibility,
     };
     return result;
   } catch (err) {
