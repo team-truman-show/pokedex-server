@@ -48,12 +48,7 @@ router.get('/mypokemon', isLoggedIn, async (req, res) => {
 
 router.get('/bringUp', isLoggedIn, async (req, res) => {
   try {
-    const tokenbearer = req.headers.authorization;
-    const token = tokenbearer.substring(7);
-    const myemail = tokenUtil.verifyToken(token).email;
-    const user = await userSearch(myemail);
-    const myid = user.id;
-    const mypokemon = await findPokemon(myid, req.query.id);
+    const mypokemon = await findPokemon(req.query.id);
     res.status(200).json(mypokemon);
   } catch (err) {
     res.status(401).json({ error: err.message });
