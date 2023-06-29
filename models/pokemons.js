@@ -1,4 +1,4 @@
-const Sequelize = require('sequelize');
+const Sequelize = require("sequelize");
 
 module.exports = class Pokemon extends Sequelize.Model {
   static init(sequelize) {

@@ -1,11 +1,13 @@
 const express = require('express');
 const models = require('./models/index');
-const userRouter = require('./rotuer/user');
-const myPokemonRouter = require('./rotuer/mypokemon');
+const userRouter = require('./router/user');
+const myPokemonRouter = require('./router/mypokemon');
 const bodyParser = require('body-parser');
-const pokemonRouter = require('./rotuer/pokemon');
-const bringUpRouter = require('./rotuer/pokeBringUp');
+const pokemonRouter = require('./router/pokemon');
+const bringUpRouter = require('./router/pokeBringUp');
 const cors = require('cors');
+// const { save } = require("./API/pokesave");
+// const { evolve } = require("./API/evolve");
 const app = express();
 const { save } = require('./API/pokesave');
 
@@ -27,7 +29,7 @@ app.use('/user', userRouter);
 app.use('/pokemon', pokemonRouter.router);
 app.use('/myPokemon', myPokemonRouter);
 app.use('/bringup', bringUpRouter);
-// save();
+// pokemonRouter.save();
 models.sequelize
   .authenticate()
   .then(() => {

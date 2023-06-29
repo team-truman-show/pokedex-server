@@ -1,18 +1,25 @@
-const superagent = require('superagent');
-const Pokemon = require('../models/pokemons');
+const superagent = require("superagent");
+const Pokemon = require("../models/pokemons");
 
 async function recursive(id, x, a) {
   if (a === true) {
     if (!x.species.url) return null;
-
-    return Number(x.species.url.split('/')[6]);
+    // return x.species.url.split("/")[6] - "0";
+    return Number(x.species.url.split("/")[6]);
   }
 
-  const y = Number(x.species.url.split('/')[6]);
+  //   const y = x.species.url.split("/")[6] - "0";
+  const y = Number(x.species.url.split("/")[6]);
   if (id == y) a = true;
 
   if (!x.evolves_to[0]) return null;
-
+  //   if (x.evolves_to.length >= 2)
+  //     return recursive(
+  //       id,
+  //       x.evolves_to[Math.floor(Math.random() * x.evolves_to.length)],
+  //       a
+  //     );
+  //   return recursive(id, x.evolves_to[0], a);
   if (x.evolves_to.length >= 2) {
     const randomIndex = Math.floor(Math.random() * x.evolves_to.length);
     return recursive(id, x.evolves_to[randomIndex], a);
@@ -42,21 +49,21 @@ async function Pokeidsearch(id) {
       possibility;
 
     for (let i = 0; i < speciesResponse.body.names.length; i++) {
-      if (speciesResponse.body.names[i].language.name === 'ko') {
+      if (speciesResponse.body.names[i].language.name === "ko") {
         name = speciesResponse.body.names[i].name;
         break;
       }
     }
 
     for (let i = 0; i < speciesResponse.body.genera.length; i++) {
-      if (speciesResponse.body.genera[i].language.name === 'ko') {
+      if (speciesResponse.body.genera[i].language.name === "ko") {
         feature = speciesResponse.body.genera[i].genus;
         break;
       }
     }
 
     for (let i = 0; i < speciesResponse.body.flavor_text_entries.length; i++) {
-      if (speciesResponse.body.flavor_text_entries[i].language.name === 'ko') {
+      if (speciesResponse.body.flavor_text_entries[i].language.name === "ko") {
         description = speciesResponse.body.flavor_text_entries[i].flavor_text;
         break;
       }
@@ -68,20 +75,22 @@ async function Pokeidsearch(id) {
     }
 
     imageurl =
-      pokemonResponse.body.sprites.other['official-artwork'].front_default;
+      pokemonResponse.body.sprites.other["official-artwork"].front_default;
     imagegif =
-      pokemonResponse.body.sprites.versions['generation-v']['black-white']
+      pokemonResponse.body.sprites.versions["generation-v"]["black-white"]
         .animated.front_default;
 
     capture_rate = speciesResponse.body.capture_rate;
-
-    Number(speciesResponse.body.evolution_chain.url.split('/')[6]);
+    evolution_url =
+      //   speciesResponse.body.evolution_chain.url.split("/")[6] - "0";
+      Number(speciesResponse.body.evolution_chain.url.split("/")[6]);
 
     const evolutionChainUrl = `https://pokeapi.co/api/v2/evolution-chain/${evolution_url}/`;
     const evolutionChainResponse = await superagent(evolutionChainUrl);
 
+    // let little = evolutionChainResponse.body.chain.species.url.split("/")[6];
     const little = Number(
-      evolutionChainResponse.body.chain.species.url.split('/')[6]
+      evolutionChainResponse.body.chain.species.url.split("/")[6]
     );
     possibility = false;
 
@@ -115,7 +124,7 @@ async function Pokemonidsearch(id) {
     const pokemon = await Pokemon.findOne({
       where: { id: id },
     });
-    if (!pokemon) return new Error('일치하는 포켓몬이 없습니다.');
+    if (!pokemon) return new Error("일치하는 포켓몬이 없습니다.");
     const result = {
       id: pokemon.dataValues.id,
       name: pokemon.dataValues.name,
@@ -126,8 +135,6 @@ async function Pokemonidsearch(id) {
       imageurl: pokemon.dataValues.imageurl,
       imagegif: pokemon.dataValues.imagegif,
       evolution_url: pokemon.dataValues.evolution_url,
-      nextevolves: pokemon.dataValues.nextevolves,
-      possibility: pokemon.dataValues.possibility,
     };
     return result;
   } catch (err) {
