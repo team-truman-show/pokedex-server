@@ -1,15 +1,13 @@
-const express = require('express');
+
+const express = require("express");
 const router = express.Router();
-const { search, searchAll } = require('../service/pokemonService/pokesearch');
-const {
-  PokeEvolveSearch,
-  PokeEvolve,
-} = require('../service/evolveService/evolve');
-const { isLoggedIn } = require('../lib/loginUtil');
-const { Pokeidsearch, Pokemonidsearch } = require('../API/pokeapi');
+const { search, searchAll } = require("../service/pokemonService/pokesearch");
+const { PokeEvolveSearch } = require("../service/evolveService/evolve");
+const { isLoggedIn } = require("../lib/loginUtil");
+const { Pokeidsearch, Pokemonidsearch } = require("../API/pokeapi");
 
 //포켓몬 id 검색
-router.get('/idsearch', (req, res) => {
+router.get("/idsearch", isLoggedIn, (req, res) => {
   Pokeidsearch(req.query.id)
     .then((result) => {
       res.status(200).send(result);
@@ -20,7 +18,7 @@ router.get('/idsearch', (req, res) => {
 });
 
 //포켓몬 전체조회
-router.get('/page', isLoggedIn, async (req, res) => {
+router.get("/page", isLoggedIn, async (req, res) => {
   try {
     searchAll().then((result) => {
       res.status(200).json(result);
@@ -31,7 +29,7 @@ router.get('/page', isLoggedIn, async (req, res) => {
 });
 
 //db에 id로 포켓몬 검색
-router.get('/dbidsearch', (req, res) => {
+router.get("/dbidsearch", isLoggedIn, (req, res) => {
   Pokemonidsearch(req.query.id)
     .then((result) => {
       if (result instanceof Error) throw result;
@@ -42,7 +40,7 @@ router.get('/dbidsearch', (req, res) => {
     });
 });
 //db에 이름으로 포켓몬 검색
-router.get('/namesearch', async (req, res) => {
+router.get("/namesearch", isLoggedIn, async (req, res) => {
   try {
     const name = req.query.name;
     const result = await search(name);
@@ -53,7 +51,7 @@ router.get('/namesearch', async (req, res) => {
   }
 });
 
-router.get('/evolve-search', isLoggedIn, async (req, res) => {
+router.get("/evolve-search", isLoggedIn, async (req, res) => {
   try {
     const pokeid = req.query.pokeid;
     const result = await PokeEvolveSearch(pokeid);

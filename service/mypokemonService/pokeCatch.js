@@ -8,10 +8,13 @@ async function catchPoke(userid, pokeid) {
 
     if (!user) return new Error("유저 정보를 찾을 수 없습니다");
     const pokemon = await Pokemon.findOne({
-      where: { id: pokeid },
-    });
-    if (!pokemon)
-      return new Error("정확한 포켓몬이 아닙니다.");
+      where: { id: pokeid },    
+    });  
+    
+    if (!pokemon) return new Error("정확한 포켓몬이 아닙니다.");
+    
+      if (!pokemon.possibility) return new Error("잡을 수 없는 포켓몬 입니다.");
+ 
     const existingPokemon = await Mypokemon.findOne({
       where: {
         userid: userid,
@@ -25,9 +28,10 @@ async function catchPoke(userid, pokeid) {
 
     const num = pokemon.capture_rate / 255;
     const user_num = Math.random();
-      if (num < user_num) {
-        throw new Error(`${Math.floor(num * 100)}% 확률 잡기 실패!`);
-      }
+
+    if (num < user_num) {
+      throw new Error(`${Math.floor(num * 100)}% 확률 잡기 실패!`);
+    }
 
     await Mypokemon.create({
       userid: userid,

@@ -35,13 +35,11 @@ module.exports = class Pokemon extends Sequelize.Model {
         evolution_url: {
           type: Sequelize.INTEGER,
         },
-        posibility: {
-          type: Sequelize.BOOLEAN,
-          allowNull: false,
-          defaultValue: true,
-        },
         nextevolves: {
           type: Sequelize.INTEGER,
+        },
+        possibility: {
+          type: Sequelize.BOOLEAN,
         },
       },
       {
@@ -53,7 +51,12 @@ module.exports = class Pokemon extends Sequelize.Model {
   }
   static associate(db) {
     db.Pokemon.hasMany(db.Mypokemon, {
-      foreignKey: { name: 'pokeid', onDelete: 'SET NULL', as: 'Mypokemons' },
+      foreignKey: { name: "pokeid", onDelete: "SET NULL", as: "Mypokemons" },
+    });
+  }
+  static associate(db) {
+    db.Pokemon.hasMany(db.Evolve, {
+      foreignKey: { name: "pokeid", onDelete: "SET NULL", as: "Evolves" },
     });
   }
 };

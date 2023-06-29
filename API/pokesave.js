@@ -18,8 +18,8 @@ async function save() {
         imagegif: result.imagegif,
         capture_rate: result.capture_rate,
         evolution_url: result.evolution_url,
-        posibility: result.posibility,
         nextevolves: result.nextevolves,
+        possibility: result.possibility,
       });
     } catch (err) {
       console.error(err);
