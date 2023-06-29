@@ -1,12 +1,11 @@
-
-const express = require("express");
-const models = require("./models/index");
-const userRouter = require("./router/user");
-const myPokemonRouter = require("./router/mypokemon");
-const bodyParser = require("body-parser");
-const pokemonRouter = require("./router/pokemon");
-const bringUpRouter = require("./router/pokeBringUp");
-const cors = require("cors");
+const express = require('express');
+const models = require('./models/index');
+const userRouter = require('./router/user');
+const myPokemonRouter = require('./router/mypokemon');
+const bodyParser = require('body-parser');
+const pokemonRouter = require('./router/pokemon');
+const bringUpRouter = require('./router/pokeBringUp');
+const cors = require('cors');
 // const { evolve } = require("./API/evolve");
 const app = express();
 const { save } = require('./API/pokesave');
@@ -25,10 +24,10 @@ const corsOptions = {
   credentials: true,
 };
 app.use(cors(corsOptions));
-app.use("/user", userRouter);
-app.use("/pokemon", pokemonRouter.router);
-app.use("/myPokemon", myPokemonRouter);
-app.use("/bringup", bringUpRouter);
+app.use('/user', userRouter);
+app.use('/pokemon', pokemonRouter.router);
+app.use('/myPokemon', myPokemonRouter);
+app.use('/bringup', bringUpRouter);
 
 // save();
 // evolve();

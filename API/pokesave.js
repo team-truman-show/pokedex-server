@@ -5,8 +5,6 @@ async function save() {
   for (let i = 1; i <= 1009; i++) {
     try {
       const result = await Pokeidsearch(i);
-      // console.log(result.name);
-      // console.log(result.posibility);
       await Pokemon.create({
         id: i,
         name: result.name,
