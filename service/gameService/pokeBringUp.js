@@ -1,4 +1,4 @@
-const { User, Mypokemon } = require("../../models/index");
+const { User, Mypokemon } = require('../../models/index');
 
 //////////// 목욕
 async function Pokeclean(userid, mypokeid, clean) {
@@ -7,7 +7,7 @@ async function Pokeclean(userid, mypokeid, clean) {
     const user = await User.findOne({
       where: { id: userid },
     });
-    if (!user) return new Error("유저 정보를 찾을 수 없습니다");
+    if (!user) return new Error('유저 정보를 찾을 수 없습니다');
     //포켓몬조회
     const myPokemon = await Mypokemon.findOne({
       where: { id: mypokeid },
@@ -15,8 +15,7 @@ async function Pokeclean(userid, mypokeid, clean) {
     //내포켓몬 조회
 
     if (!myPokemon)
-      return new Error("해당 유저와 포켓몬에 대한 정보를 찾을 수 없습니다.");
-
+      return new Error('해당 유저와 포켓몬에 대한 정보를 찾을 수 없습니다.');
     myPokemon.clean = clean;
     await myPokemon.save();
 
@@ -33,13 +32,13 @@ async function Pokefull(userid, mypokeid, full) {
     const user = await User.findOne({
       where: { id: userid },
     });
-    if (!user) return new Error("유저 정보를 찾을 수 없습니다");
+    if (!user) return new Error('유저 정보를 찾을 수 없습니다');
     //포켓몬조회
     const myPokemon = await Mypokemon.findOne({
       where: { id: mypokeid },
     });
     if (!myPokemon)
-      return new Error("해당 유저와 포켓몬에 대한 정보를 찾을 수 없습니다.");
+      return new Error('해당 유저와 포켓몬에 대한 정보를 찾을 수 없습니다.');
 
     myPokemon.full = full;
     await myPokemon.save();
@@ -56,13 +55,13 @@ async function Pokeintimate(userid, mypokeid, intimate) {
     const user = await User.findOne({
       where: { id: userid },
     });
-    if (!user) return new Error("유저 정보를 찾을 수 없습니다");
+    if (!user) return new Error('유저 정보를 찾을 수 없습니다');
     //포켓몬조회
     const myPokemon = await Mypokemon.findOne({
       where: { id: mypokeid },
     });
     if (!myPokemon)
-      return new Error("해당 유저와 포켓몬에 대한 정보를 찾을 수 없습니다.");
+      return new Error('해당 유저와 포켓몬에 대한 정보를 찾을 수 없습니다.');
 
     myPokemon.intimate = intimate;
     await myPokemon.save();
